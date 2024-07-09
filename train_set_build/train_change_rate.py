@@ -108,7 +108,6 @@ def create_chessboard_blocks(image_block):
                 # 这个都会放入的像素是还没有进行掩码之后的像素，所以这个最好是要放到外面去
                 mask_surround_pixel = get_surround_change_rate_change(image_block, (i, j))
                 mask_surround_pixels.append(mask_surround_pixel)
-
     return np.array(encoder_input), chessboard_blocks, decoder_output,np.array(mask_surround_pixels)
 
 
@@ -128,7 +127,7 @@ def masking_block(blocks):
         chessboard_blocks.append(chessboard_block)
         spatial_mask_infos.append(spatial_mask_info)
         decoder_outputs.append(decoder_output)
-    return np.array(decoder_outputs), np.array(spatial_mask_infos),np.array(chessboard_blocks),np.array(origin_block)
+    return np.array(decoder_outputs), np.array(spatial_mask_infos),np.array(chessboard_blocks)
 def random_block_split_for_all(blocks,block_cnt,index):
     selected_indices = [random.randint(0, len(blocks)-1) for _ in range(block_cnt)]
     random_block = []
@@ -181,18 +180,14 @@ def get_training_change_rate(directory, pic_cnt, block_cnt, block_size):
         blocks, block_indexes = block_split(pic, block_size)
         # 随机选择块
         blocks, block_indexes = random_block_split_for_all(blocks, block_cnt, block_indexes)
-        encoder_inputs, decoder_outputs, spatial_mask_infos,chessboard_blocks,origin_block = masking_block(blocks)
-        # print(origin_block[0])
-        # print(chessboard_blocks[0])
-        # print(decoder_outputs[0])
-        # print(spatial_mask_infos[0])
+        decoder_outputs, spatial_mask_infos,chessboard_blocks = masking_block(blocks)
+
 
         decoder_outputs_all.extend(decoder_outputs)
         spatial_mask_infos_all.extend(spatial_mask_infos)
         blocks_all.extend(chessboard_blocks)
-        origin_all.extend(origin_block)
         cnt += 1
-    return np.array(blocks_all), np.array(decoder_outputs_all),np.array(spatial_mask_infos_all),np.array(origin_all)
+    return np.array(blocks_all), np.array(decoder_outputs_all),np.array(spatial_mask_infos_all)
 
 def get_training_change_mask(directory, pic_cnt):
     """
@@ -210,7 +205,7 @@ def get_training_change_mask(directory, pic_cnt):
         pic = open_picture(filepath)
         pic = pic.astype(np.int32)
         blocks = np.array([pic])
-        encoder_inputs, decoder_outputs, spatial_mask_infos,chessboard_blocks = masking_block(blocks)
+        decoder_outputs, spatial_mask_infos,chessboard_blocks = masking_block(blocks)
 
         decoder_outputs_all.extend(decoder_outputs)
         spatial_mask_infos_all.extend(spatial_mask_infos)

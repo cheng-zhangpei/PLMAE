@@ -1,0 +1,1 @@
+using random sample to utmost the ration of the method

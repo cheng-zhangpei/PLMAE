@@ -1,0 +1,118 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% NOTE: Except for plotPC(), it is a must to have
+%       initPC() run before using any other routine.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+>> N=128; K=64;
+
+>> %%%%%%%%%%%% 1.  BSC Channel  %%%%%%%%%%%%%
+>> initPC(N,K,'BSC',0.1); % Transition prob 'p' of BSC assumed during code-design = 0.1
+
+ All polar coding parameters & resources initialized. (in a structure - "PCparams") 
+                           N: 128
+                           K: 64
+                           n: 7
+                    FZlookup: [128x1 double]
+        design_channelstring: 'BSC'
+         design_channelstate: 0.1000
+                         LLR: [1x255 double]
+                        BITS: [2x127 double]
+          bitreversedindices: [128x1 double]
+    index_of_first0_from_MSB: [128x1 double]
+    index_of_first1_from_MSB: [128x1 double]
+
+>> u=(rand(K,1)>0.5); 			%random message
+>> x=pencode(u); 			%polar encoding
+>> y=OutputOfChannel(x,'BSC',0.15); 	%simulate BSC channel with p=0.1
+>> uhat=pdecode(y,'BSC',0.15); 		%decode under the same BSC channel setting
+
+>> logical( sum( uhat == u ) == K )	%check for Decoding success!
+
+ans =
+
+     1               
+
+%%%%%%%%%%%%%%% PLOTTING PERFORMANCE CURVES %%%%%%%%%%%%%%%%%%
+>> plotPC(256,128,'BSC', 0.1, 0.01:0.02:0.16,10000) % Last is #Monte-Carlo-samples. This module runs everything necessary. Doesn't require anything to have initialized before.
+
+ * Max. Monte-Carlo Iterations = 10000, ensuring 100 frame errors, and a minimum of 1000 iterations
+
+ * Polar Code designed for BSC channel at p=0.100000
+
+ * Channel-states (BSC-p) to be run: 
+	     0.0100    0.0300    0.0500    0.0700    0.0900    0.1100    0.1300    0.1500
+
+
+........(lots of text)
+
+
+     BSC-p           :    0.0100    0.0300    0.0500    0.0700    0.0900    0.1100    0.1300    0.1500
+
+ Frame Error Rates   :         0    0.0081    0.0929    0.2880    0.6110    0.8580    0.9680    0.9980
+
+ Bit Error Rates     :         0    0.0007    0.0125    0.0494    0.1564    0.2624    0.3650    0.4218
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+>> %%%%%%%%%%%%%%%%%%% 2.  BEC Channel  %%%%%%%%%%%%%%%%%%%%%
+>> initPC(N,K,'BEC',0.1); % Erasure prob 'epsilon' of BEC assumed during code-design = 0.1
+
+ All polar coding parameters & resources initialized. (in a structure - "PCparams") 
+                           N: 128
+                           K: 64
+                           n: 7
+                    FZlookup: [128x1 double]
+        design_channelstring: 'BEC'
+         design_channelstate: 0.1000
+                         LLR: [1x255 double]
+                        BITS: [2x127 double]
+          bitreversedindices: [128x1 double]
+    index_of_first0_from_MSB: [128x1 double]
+    index_of_first1_from_MSB: [128x1 double]
+
+>> u=(rand(K,1)>0.5); 			%random message
+>> x=pencode(u); 			%polar encoding
+>> y=OutputOfChannel(x,'BEC',0.15); 	%simulate BEC channel with erasure prob=0.1
+>> uhat=pdecode(y,'BEC',0.15); 		%decode under the same BEC channel setting
+
+>> logical( sum( uhat == u ) == K )	%check for Decoding success!
+
+ans =
+
+     1
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+>> %%%%%%%%%%%% 3.  AWGN Channel  %%%%%%%%%%%%%
+>> initPC(N,K,'AWGN',0); %designSNR=0dB
+
+ All polar coding parameters & resources initialized. (in a structure - "PCparams") 
+                           N: 128
+                           K: 64
+                           n: 7
+                    FZlookup: [128x1 double]
+        design_channelstring: 'AWGN'
+         design_channelstate: 0
+                         LLR: [1x255 double]
+                        BITS: [2x127 double]
+          bitreversedindices: [128x1 double]
+    index_of_first0_from_MSB: [128x1 double]
+    index_of_first1_from_MSB: [128x1 double]
+
+>> u=(rand(K,1)>0.5);             %random message
+>> x=pencode(u);      		  %polar encoding
+>> y=OutputOfChannel(x,'AWGN',1); %simulate AWGN channel at Eb/N0=1dB
+>> uhat=pdecode(y,'AWGN',1); 	  %decode under the same AWGN channel setting.
+
+>> logical( sum( uhat == u ) == K )	%check for Decoding success!
+
+ans =
+
+     1
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

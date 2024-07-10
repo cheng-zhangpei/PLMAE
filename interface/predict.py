@@ -84,10 +84,8 @@ if __name__ == '__main__':
     tf.config.experimental.set_visible_devices(gpus[0], 'GPU')
     # blocks_directory = r"D:\czp\mae\test_model\error_block_10"
     block_path = r"D:\czp\mae\test_model\error_block_10\img-airplane.bmp-pos-(0, 8).bmp"
-    # 从测试图形块中挑选一张图片
     test_block = open_picture(block_path)
     test_block = test_block.astype(np.int32)
-    # 如果是改block=6 / 10 可以把结尾8改成对应size
     model_path = r"D:\czp\mae\trained_model\index_change_8"
     predict_values_1 = predict_by_model_1(test_block,model_path)
     predict_values_2 = predict_by_model_2(block_path,model_path)

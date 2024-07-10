@@ -13,7 +13,7 @@ if __name__ == "__main__":
     tf.config.experimental.set_visible_devices(gpus[3], 'GPU')
     bit = 3
     dir_path = "../test_data"
-    model_name = "../trained_model/index_change_8_25%"
+    model_name = "../trained_model/our_works"
     # model_name = "../trained_model/test_model_combine_1"
     print("=========================[seg]===============================")
     ours_experiment_chessboard(bit, dir_path, 6000, 8, model_name,masking_rate=0.75)

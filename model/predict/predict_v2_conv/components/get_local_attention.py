@@ -13,9 +13,7 @@ from tensorflow.python.ops.gen_array_ops import matrix_band_part
 
 
 def to_mask(x, mask, mode='mul'):
-    """通用mask函数
-    这里的mask.shape=[batch_size, seq_len]或[batch_size, seq_len, 1]
-    """
+
     if mask is None:
         return x
     else:

@@ -16,8 +16,6 @@ from keras.regularizers import l2
 
 def FeatureExtractor(pic,filter):
     """
-    输入一张图片得到卷积之后的特征
-    由于图像块比较小，这个地方就简单加上一个残差块来进行特征的提取
     :return:
     """
     # masking the value of decoder output

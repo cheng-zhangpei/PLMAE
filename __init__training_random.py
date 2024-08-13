@@ -38,9 +38,7 @@ def generate_index(input):
 
 if __name__ == "__main__":
     tf.keras.backend.clear_session()
-
     gpus = tf.config.experimental.list_physical_devices('GPU')
-    # 指定使用第一块GPU来进行训练
     tf.config.experimental.set_visible_devices(gpus[0], 'GPU')
     tf.config.experimental.set_memory_growth(gpus[0], True)
 
@@ -49,7 +47,6 @@ if __name__ == "__main__":
         encoder_input, decoder_output, spatial_mask_infos, origin_all = get_training_random_mask(directory_name,
                                                                                                  pic_cnt, block_cnt,
                                                                                                  block_size=block_size)
-        # encoder_input一定是掩码之后的块
         # print(encoder_input[0])
         mask_index, unmask_index = generate_index(encoder_input[0])
         unmask_index = tf.convert_to_tensor(unmask_index)

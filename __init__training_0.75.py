@@ -1,5 +1,5 @@
 """
-@Function:  测试卷积层来保证网络与数据的正确性
+@Function:
 @Author : ZhangPeiCheng
 @Time : 2023/12/12 7:49
 """
